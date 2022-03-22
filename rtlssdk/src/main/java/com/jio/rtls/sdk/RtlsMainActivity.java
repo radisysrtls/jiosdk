@@ -42,18 +42,19 @@ public class RtlsMainActivity extends AppCompatActivity {
     private List<BluetoothDeviceDetails> bluetoothDeviceDetailsList;
     private WifiManager wifiManager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rtls_main);
+    public RtlsMainActivity(Context context) {
         adapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothDeviceDetailsList = new ArrayList<>();
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_rtls_main);
+    }
+
+    public void registerReceiver() {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -61,6 +62,16 @@ public class RtlsMainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         registerReceiver(wifiScanReceiver, intentFilter);
+    }
+
+    public void unregisterReceiver() {
+        super.onDestroy();
+        try {
+            unregisterReceiver(receiver);
+            unregisterReceiver(wifiScanReceiver);
+        } catch (Exception e) {
+            Log.e("LocationFetch Service", "Receiver error");
+        }
     }
 
     public void startBluetoothScan() {
@@ -245,15 +256,5 @@ public class RtlsMainActivity extends AppCompatActivity {
                 cellData.setRssi(rssi);
         }
         return cellData;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        try {
-            unregisterReceiver(receiver);
-        } catch (Exception e) {
-            Log.e("LocationFetch Service", "Receiver error");
-        }
     }
 }
