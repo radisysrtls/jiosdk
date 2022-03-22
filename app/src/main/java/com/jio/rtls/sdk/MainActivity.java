@@ -3,8 +3,12 @@ package com.jio.rtls.sdk;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

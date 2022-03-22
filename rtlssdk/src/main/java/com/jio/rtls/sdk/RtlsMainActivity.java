@@ -79,12 +79,12 @@ public class RtlsMainActivity extends AppCompatActivity {
         adapter.startDiscovery();
     }
 
-    public void startWifiScan() {
+    public void startWifiScan(Context context) {
         /*boolean success = wifiManager.startScan();
         if (!success) {
             scanFailure();
         }*/
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         results.clear();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
