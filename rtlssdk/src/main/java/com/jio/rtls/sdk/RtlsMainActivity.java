@@ -124,7 +124,7 @@ public class RtlsMainActivity extends AppCompatActivity {
         }
     };
 
-    private List<ScanResult> scanSuccess() {
+    public List<ScanResult> scanSuccess() {
         List<ScanResult> results = wifiManager.getScanResults();
         for (ScanResult scanResult : results) {
             Log.d("Wifi Details ", scanResult.SSID);
@@ -132,7 +132,7 @@ public class RtlsMainActivity extends AppCompatActivity {
         return results;
     }
 
-    private List<ScanResult> scanFailure() {
+    public List<ScanResult> scanFailure() {
         List<ScanResult> results = wifiManager.getScanResults();
         return results;
     }
