@@ -122,7 +122,7 @@ public class RtlsMainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             results = wifiManager.getScanResults();
-            unregisterReceiver(this);
+            context.unregisterReceiver(this);
         }
     };
 
