@@ -88,7 +88,7 @@ public class RtlsMainActivity extends AppCompatActivity {
         results.clear();
         context.registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
-        Toast.makeText(this, "Scanning WiFi ...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Scanning WiFi ...", Toast.LENGTH_SHORT).show();
     }
 
     private void turnOnWifi() {
