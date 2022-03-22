@@ -41,11 +41,12 @@ public class RtlsMainActivity extends AppCompatActivity {
     private BluetoothAdapter adapter;
     private List<BluetoothDeviceDetails> bluetoothDeviceDetailsList;
     private WifiManager wifiManager;
+    private List<ScanResult> results = new ArrayList<>();
 
-    public RtlsMainActivity(Context context) {
+    public RtlsMainActivity() {
         adapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothDeviceDetailsList = new ArrayList<>();
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+//        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class RtlsMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rtls_main);
     }
 
-    public void registerReceiver() {
+    /*public void registerReceiver() {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -62,9 +63,9 @@ public class RtlsMainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         registerReceiver(wifiScanReceiver, intentFilter);
-    }
+    }*/
 
-    public void unregisterReceiver() {
+   /* public void unregisterReceiver() {
         super.onDestroy();
         try {
             unregisterReceiver(receiver);
@@ -72,17 +73,22 @@ public class RtlsMainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("LocationFetch Service", "Receiver error");
         }
-    }
+    }*/
 
     public void startBluetoothScan() {
         adapter.startDiscovery();
     }
 
     public void startWifiScan() {
-        boolean success = wifiManager.startScan();
+        /*boolean success = wifiManager.startScan();
         if (!success) {
             scanFailure();
-        }
+        }*/
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        results.clear();
+        registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        wifiManager.startScan();
+        Toast.makeText(this, "Scanning WiFi ...", Toast.LENGTH_SHORT).show();
     }
 
     private void turnOnWifi() {
@@ -112,7 +118,15 @@ public class RtlsMainActivity extends AppCompatActivity {
         }
     };
 
-    BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+    BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            results = wifiManager.getScanResults();
+            unregisterReceiver(this);
+        }
+    };
+
+    /*BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context c, Intent intent) {
             boolean success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
@@ -122,13 +136,9 @@ public class RtlsMainActivity extends AppCompatActivity {
                 scanFailure();
             }
         }
-    };
+    };*/
 
     public List<ScanResult> scanSuccess() {
-        List<ScanResult> results = wifiManager.getScanResults();
-        for (ScanResult scanResult : results) {
-            Log.d("Wifi Details ", scanResult.SSID);
-        }
         return results;
     }
 
