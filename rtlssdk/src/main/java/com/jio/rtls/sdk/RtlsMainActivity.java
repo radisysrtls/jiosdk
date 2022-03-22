@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 import com.jio.rtls.sdk.model.BluetoothDeviceDetails;
 import java.util.ArrayList;
-import com.radisys.rtls.model.CellData;
+import com.jio.rtls.sdk.model.CellData;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -86,7 +86,7 @@ public class RtlsMainActivity extends AppCompatActivity {
         }*/
         wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         results.clear();
-        registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        context.registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
         Toast.makeText(this, "Scanning WiFi ...", Toast.LENGTH_SHORT).show();
     }

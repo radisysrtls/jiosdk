@@ -1,4 +1,4 @@
-package com.radisys.rtls.model;
+package com.jio.rtls.sdk.model;
 
 public class CellData {
     private int mcc;
